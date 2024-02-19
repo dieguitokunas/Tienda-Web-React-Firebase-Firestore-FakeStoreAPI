@@ -30,7 +30,7 @@ export function Index() {
               alt={product.description}
               className="object-contain border-none w-full h-full bg-white object-center  rounded-[inherit]"
             />
-            <Favorite className="absolute top-0 right-0 text-white border border-black"/>
+            <Favorite className="absolute top-0 right-0 text-white"/>
           </div>
           <div className="article-content bg-[--white-bone] h-28 justify-center gap-4 p-4 border-[--dark-gray] border-t-2 flex flex-col">
             <div className="article-header flex justify-between items-center ">
