@@ -1,3 +1,12 @@
 .MuiDrawer-paperAnchorBottom{
     background-color: var(--dark-gray);
 }
+
+header ul .css-1c35hjw-MuiPaper-root-MuiAccordion-root{
+    background-color: var(--dark-gray) !important;
+    color: var(--white-bone) !important;
+    box-shadow: none !important;
+    .MuiAccordionSummary-expandIconWrapper{
+        color: var(--white-bone);
+    }
+}

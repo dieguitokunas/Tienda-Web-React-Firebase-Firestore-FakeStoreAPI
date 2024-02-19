@@ -1,0 +1,3 @@
+footer {
+    background: linear-gradient(to bottom, var(--pinky-gray) 1%, var(--dark-gray) 10%, var(--dark-gray)70%);
+}
