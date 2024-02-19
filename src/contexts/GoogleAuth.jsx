@@ -19,7 +19,7 @@ const [showNoAccountAlert,setShowNoAccountAlert]=useState(false)
       setSignInAlert(true)
       setTimeout(()=>setSignInAlert(false),5000)
     } catch (error) {
-      console.log("Falló el inicio de sesión con Google", error);
+      console.log("Google Sign-In failed", error);
     }
   };
   const googleSignOut=async()=>{
@@ -54,7 +54,7 @@ const [showNoAccountAlert,setShowNoAccountAlert]=useState(false)
       {children}
     {user&&
         <Fade in={showSignInAlert} easing={{exit:"ease-in-out"}}>
-      <Alert className='fixed top-0 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-20' variant='standard' severity='success'>
+      <Alert className='fixed top-2 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-20' variant='filled' severity='success'>
         <AlertTitle>
           Successful registration
         </AlertTitle>
@@ -67,7 +67,7 @@ const [showNoAccountAlert,setShowNoAccountAlert]=useState(false)
     {
       !user&&showSignOutAlert&&
       <Fade in={showSignOutAlert} easing={{exit:"ease-in-out"}}>
-      <Alert className='fixed top-0 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-20' variant='standard' severity='success'>
+      <Alert className='fixed top-2 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-20' variant='filled' color='error' severity='success'>
               <AlertTitle>
                 You logged out of your account
               </AlertTitle>
@@ -80,7 +80,7 @@ const [showNoAccountAlert,setShowNoAccountAlert]=useState(false)
           {
             !user&&showNoAccountAlert&&
             <Fade in={showNoAccountAlert} easing={{exit:"ease-in-out"}}>
-            <Alert className='fixed top-0 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-24' variant='standard' severity='error'>
+            <Alert className='fixed top-2 right-1/2 bg-[--golden-yellow] translate-x-1/2 w-[28rem] h-24' variant='filled' color='warning' severity='error'>
                     <AlertTitle>
                       No account logged in
                     </AlertTitle>

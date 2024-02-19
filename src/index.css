@@ -12,5 +12,5 @@
     font-family: sans;
 }
 .category-section{
-    background: linear-gradient(to bottom, var(--dark-gray)80%, var(--pinky-gray));
+    background: linear-gradient(to bottom, var(--dark-gray)50%, var(--pinky-gray));
 }

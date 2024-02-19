@@ -9,6 +9,11 @@ export function APICall({ children }) {
       setData(responseData);
     } catch (error) {
       console.error(error);
+    
+      setInterval(() => {
+        fetchData()
+      }, 10000);
+
     }
   };
 
