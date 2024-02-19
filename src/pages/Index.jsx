@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { APIContext } from "../contexts/APICall";
-import { Fade, LinearProgress, Skeleton } from "@mui/material";
+import { Fade, Skeleton } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Slider from "@mui/material/Slider";
 import { googleAuthContext } from "../contexts/GoogleAuth";
+import { Favorite } from "@mui/icons-material";
 import "../index.css";
 
 export function Index() {
@@ -23,14 +24,15 @@ export function Index() {
     data.map((product, index) => (
       <Fade in={true} enter={true} key={index}>
         <article className="flex-col justify-center flex w-full h-full bg-[--white-bone] border border-[--dark-gray] rounded-sm cursor-pointer">
-          <div className="image-container w-full h-28 rounded-[inherit]">
+          <div className="image-container relative w-full h-28 rounded-[inherit]">
             <img
               src={product.image}
               alt={product.description}
               className="object-contain border-none w-full h-full bg-white object-center  rounded-[inherit]"
             />
+            <Favorite className="absolute top-0 right-0 text-white border border-black"/>
           </div>
-          <div className="article-content  h-28 justify-center gap-4 p-4 flex flex-col">
+          <div className="article-content bg-[--white-bone] h-28 justify-center gap-4 p-4 border-[--dark-gray] border-t-2 flex flex-col">
             <div className="article-header flex justify-between items-center ">
               <span className="w-2/3 h-6 overflow-hidden text-ellipsis">
                 <p>{product.title}</p>
