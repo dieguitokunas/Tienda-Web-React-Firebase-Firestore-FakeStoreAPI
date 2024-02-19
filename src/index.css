@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+:root{
+    --pinky-gray:#A39594;
+    --dark-gray:#423E37;
+    --white-bone:#EDEBD7;
+    --golden-yellow:#E3B23C;
+}
+*,html{
+    font-family: sans;
+}
+.category-section{
+    background: linear-gradient(to bottom, var(--dark-gray)80%, var(--pinky-gray));
+}
