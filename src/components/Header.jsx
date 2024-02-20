@@ -4,19 +4,16 @@ import {
   ModeNight,
   Menu,
   ShoppingCart,
-  Shop,
   ShoppingBag,
-  ExpandCircleDown,
-  ExpandMore,
   Logout,
   Login,
 } from "@mui/icons-material";
 import { SwipeableDrawer } from "@mui/material";
+import MenuItem from '@mui/material/MenuItem';
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./Header.css";
 import { googleAuthContext } from "../contexts/GoogleAuth";
-import { signOut } from "firebase/auth";
 export function Header() {
   const nav = useNavigate();
   const [user,signIn,signOut]=useContext(googleAuthContext)
@@ -66,14 +63,14 @@ export function Header() {
       icon: darkTheme ? <ModeNight /> : <LightMode />,
     },{
       title:`${user?'Logout':'Login'}`,
-      icon:`${user?<Logout/>:<Login/>}`
+      icon:user?<Logout color="error"/>:<Login sx={{color:"#E3B23C"}}/>
     }
   ];
 
 
   return (
     <>
-      <header className="w-full h-12 bg-[--dark-gray] flex justify-between items-center sm:pl-20 sm:pr-20">
+      <header className="w-full h-12 bg-[--dark-gray] max-sm:hidden sm:flex justify-between items-center sm:pl-20 sm:pr-20">
         <div className="max-sm:hidden">
           <img src="src/assets/react.svg" alt="" />
         </div>
@@ -86,7 +83,7 @@ export function Header() {
                     if(index===4){
                       user?signOut():signIn()
                     }
-                    nav(item.nav)}}
+                    index!==3?nav(item.nav):changeTheme()}}
                 >
                   {index!==3?item.title:item.icon}
                 </li>
@@ -99,28 +96,20 @@ export function Header() {
           showMobileBar ? "bottom-0" : "bottom-[-10rem]"
         } bg-[--dark-gray] transition-all w-full h-12 flex items-center sm:hidden max-sm:fixed z-[1000] max-sm:justify-center border-t-2 border-[--golden-yellow]`}
       >
-        <ul className="sm:hidden">
-          <Menu
-            onClick={() => setDrawerOpen(true)}
-            className="cursor-pointer text-[--white-bone] w-[3rem!important] h-[6rem!important] *:sm:hidden"
-          />
-          <SwipeableDrawer
-            open={drawerOpen}
-            onOpen={() => handleDrawerOpen()}
-            onClose={() => handleDrawerClose()}
-            anchor="bottom"
-            color="black"
-          >
             <div className=" w-full h-14">
               <ul className="w-full h-full flex bg-[--dark-gray] gap-10 justify-center items-center">
                 {navItems.map((item, index) => {
                   if (index !== 1) {
                     return (
                       <li
-                        className="hover:text-[--pinky-gray] text-[--white-bone]"
+                        className="hover:text-[--pinky-gray] text-[--white-bone] cursor-pointer"
                         key={index}
-                        onClick={() =>
-                          index !== 2 ? nav(item.nav) : changeTheme()
+                        onClick={() =>{
+                          if(index===4){
+                            user?signOut():signIn()
+                          }
+                          index !== 3 ? nav(item.nav) : changeTheme()
+                        }
                         }
                       >
                         {item.icon}
@@ -132,8 +121,6 @@ export function Header() {
                 })}
               </ul>
             </div>
-          </SwipeableDrawer>
-        </ul>
       </header>
     </>
   );

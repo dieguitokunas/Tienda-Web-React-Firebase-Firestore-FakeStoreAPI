@@ -10,3 +10,6 @@ header ul .css-1c35hjw-MuiPaper-root-MuiAccordion-root{
         color: var(--white-bone);
     }
 }
+.PrivateSwipeArea-root{
+    height: 0 !important;
+}

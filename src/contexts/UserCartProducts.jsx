@@ -37,7 +37,6 @@ export function UserCartProducts({ children }) {
             setUserPoducts(null);
           } else {
             setUserPoducts(carrito.docs[0].data());
-            console.log(carrito.docs[0].data());
           }
         }
       } catch (error) {
@@ -67,6 +66,10 @@ export function UserCartProducts({ children }) {
       console.error("Error adding product to cart:", error);
     }
   };
+
+  const deleteProductsFromCart=async()=>{
+
+  }
 
   useEffect(() => {
     if (user) {
