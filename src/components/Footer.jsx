@@ -11,13 +11,13 @@ export function Footer() {
       <span className="border-[--golden-yellow] w-full h-48 border-r-2 border-b-2 p-2">
         <div className="text-[--white-bone]">
           <p className="font-black text-xl border-b-2">About me</p>
-          <span className="flex flex-col gap-4 p-2 ">
+          <span className="flex flex-col gap-4 ">
             <p>Hello! I'm Diego Borrás, a young Web Developer.</p>
             <p>
               If you are interesed in knowing more about my work, you can visit my
-              portfolio by{" "}
+              github by{" "}
               <strong className="text-[--golden-yellow]">
-                <a href="">clicking here</a>
+                 <a href="https://github.com/dieguitokunas">clicking here</a>
               </strong>
             </p>
           </span>
@@ -44,11 +44,9 @@ export function Footer() {
             </li>
             <li className="flex gap-2">
               <LinkedIn />
-              Diego Borrás on Linkedin
-            </li>
-            <li className="flex gap-2">
-              <GitHub />
-              dieguitokunas on GitHub
+              <a href="https://www.linkedin.com/in/diego-borr%C3%A1s-b623352a4/">
+                Diego Borrás on Linkedin
+                </a>
             </li>
           </ul>
         </div>

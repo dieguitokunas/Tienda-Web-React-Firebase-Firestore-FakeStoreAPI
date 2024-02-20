@@ -3,6 +3,7 @@ import { FirebaseContext } from "./FireBaseConfig";
 import {
   addDoc,
   collection,
+  deleteDoc,
   getDocs,
   query,
   setDoc,
@@ -28,15 +29,21 @@ export function UserCartProducts({ children }) {
           query(collection(db, `users`), where("email", "==", user.email))
         );
         if (!userSnapshot.empty) {
-          //Obtenemos los documentos de la Snapshot, en este caso [0] porque solo se espera un 
+          //Get the snapshot first document reference
           const docref = userSnapshot.docs[0].ref;
+          //Set the userUID with the uid from the Firestore document
           setUserUID(docref.id);
 
           const carrito = await getDocs(collection(docref, "carrito"));
           if (carrito.empty) {
             setUserPoducts(null);
           } else {
-            setUserPoducts(carrito.docs[0].data());
+            let productsArray=[]
+            //Push every document data to the array 
+            carrito.forEach(doc=>{
+              productsArray.push(doc.data())
+            })
+            setUserPoducts(productsArray)
           }
         }
       } catch (error) {
@@ -46,29 +53,40 @@ export function UserCartProducts({ children }) {
   };
 
   const addProductsToCart = async (productId) => {
-    if (!user || !userUID) return;
-  
-    try {
+    if (user && userUID){   
+      try {
       const carritoCollection = collection(db, `users/${userUID}/carrito`);
       const querySnapshot = await getDocs(
         query(carritoCollection, where("id", "==", productId))
-      );
-  
-      if (querySnapshot.empty) {
-        await addDoc(carritoCollection, { id: productId, quantity: 1 });
-      } else {
-        const docSnapshot = querySnapshot.docs[0];
-        const quantity = docSnapshot.data().quantity + 1;
-        const productId=docSnapshot.data().id
-        await setDoc(docSnapshot.ref, { id:productId,quantity:quantity });
+        );
+        
+        if (querySnapshot.empty) {
+          await addDoc(carritoCollection, { id: productId, quantity: 1 });
+        } else {
+          const docSnapshot = querySnapshot.docs[0];
+          const quantity = docSnapshot.data().quantity + 1;
+          const productId=docSnapshot.data().id
+          await setDoc(docSnapshot.ref, { id:productId,quantity:quantity });
+        }
+      } catch (error) {
+        console.error("Error adding product to cart:", error);
       }
-    } catch (error) {
-      console.error("Error adding product to cart:", error);
+    };
+  }
+
+  const deleteProductsFromCart=async(productId)=>{
+    if(user&&userUID){
+        try {
+          const carritoCollection=collection(db,`users/${userUID}/carrito`)
+          const getProductSnapshot=await getDocs(query(carritoCollection,where("id","==",productId)))
+          if(!getProductSnapshot.empty){
+            const docRef=getProductSnapshot.docs[0].ref
+            await deleteDoc(docRef)
+          }
+        } catch (error) {
+          console.log(error)
+        }
     }
-  };
-
-  const deleteProductsFromCart=async()=>{
-
   }
 
   useEffect(() => {
@@ -78,7 +96,7 @@ export function UserCartProducts({ children }) {
   }, [db, user]);
 
   return (
-    <UserCartProductsContext.Provider value={[userProducts, addProductsToCart]}>
+    <UserCartProductsContext.Provider value={[userProducts, addProductsToCart,deleteProductsFromCart]}>
       {children}
     </UserCartProductsContext.Provider>
   );

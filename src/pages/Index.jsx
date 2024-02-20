@@ -67,7 +67,7 @@ export function Index() {
               return(
 
                 <div
-                className="min-w-fit max-md:w-2/4 w-full min-h-20 text-center   h-fit p-2 bg-[--golden-yellow]  flex flex-col gap-2 items-center justify-center"
+                className="max-md:w-3/4 w-full min-h-20 text-center   h-fit p-2 bg-[--golden-yellow]  flex flex-col gap-2 items-center justify-center"
                 key={index}
                 >
               

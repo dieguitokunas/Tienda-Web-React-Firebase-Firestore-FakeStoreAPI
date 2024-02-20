@@ -57,22 +57,23 @@ export function Header() {
       title: "Go to cart",
       nav: "/Cart",
       icon: <ShoppingCart />,
+    },{
+      title:`${user?'Logout':'Login'}`,
+      icon:user?<Logout color="error"/>:<Login sx={{color:"#E3B23C"}}/>
     },
     {
       title: "Mode",
       icon: darkTheme ? <ModeNight /> : <LightMode />,
-    },{
-      title:`${user?'Logout':'Login'}`,
-      icon:user?<Logout color="error"/>:<Login sx={{color:"#E3B23C"}}/>
     }
   ];
 
 
   return (
     <>
-      <header className="w-full h-12 bg-[--dark-gray] max-sm:hidden sm:flex justify-between items-center sm:pl-20 sm:pr-20">
-        <div className="max-sm:hidden">
+      <header className="w-full h-12 bg-[--darker-dark-gray] max-md:hidden md:flex justify-between items-center sm:pl-20 sm:pr-20">
+        <div className="max-sm:hidden sm:flex items-center gap-4">
           <img src="src/assets/react.svg" alt="" />
+          <p className="text-[--golden-yellow] font-black font-mono text-2xl">FakeStore</p>
         </div>
         <ul className="max-sm:hidden flex gap-5 items-center text-[--white-bone] text-lg font-bold *:cursor-pointer *:transition-colors *:ease-in-out ">
           {navItems.map((item, index) => (
@@ -80,12 +81,12 @@ export function Header() {
                   className="hover:text-[--pinky-gray]"
                   key={index}
                   onClick={() => {
-                    if(index===4){
+                    if(index===3){
                       user?signOut():signIn()
                     }
-                    index!==3?nav(item.nav):changeTheme()}}
+                    index!==4?nav(item.nav):changeTheme()}}
                 >
-                  {index!==3?item.title:item.icon}
+                  {index!==4?item.title:item.icon}
                 </li>
               )
           )}
@@ -94,31 +95,28 @@ export function Header() {
       <header
         className={`${
           showMobileBar ? "bottom-0" : "bottom-[-10rem]"
-        } bg-[--dark-gray] transition-all w-full h-12 flex items-center sm:hidden max-sm:fixed z-[1000] max-sm:justify-center border-t-2 border-[--golden-yellow]`}
+        } bg-[--dark-gray] transition-all w-full h-12 flex items-center md:hidden max-md:fixed z-[1000] max-md:justify-center border-t-2 border-[--golden-yellow]`}
       >
             <div className=" w-full h-14">
               <ul className="w-full h-full flex bg-[--dark-gray] gap-10 justify-center items-center">
                 {navItems.map((item, index) => {
-                  if (index !== 1) {
                     return (
                       <li
                         className="hover:text-[--pinky-gray] text-[--white-bone] cursor-pointer"
                         key={index}
                         onClick={() =>{
-                          if(index===4){
+                          if(index===3){
                             user?signOut():signIn()
                           }
-                          index !== 3 ? nav(item.nav) : changeTheme()
+                          index !== 4 ? nav(item.nav) : changeTheme()
                         }
                         }
                       >
                         {item.icon}
                       </li>
                     );
-                  } else {
-                    return null; // Omitir renderización cuando el índice es 1
-                  }
-                })}
+                  } 
+                )}
               </ul>
             </div>
       </header>
