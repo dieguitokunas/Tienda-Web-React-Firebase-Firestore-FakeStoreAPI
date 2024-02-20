@@ -119,10 +119,10 @@ export function Products() {
           ))
 
   useEffect(() => {
-    if (data&&user) {
+    if (data) {
       setLoaded(true)
     }
-  }, [user,data])
+  }, [data])
 
   return (
     <>

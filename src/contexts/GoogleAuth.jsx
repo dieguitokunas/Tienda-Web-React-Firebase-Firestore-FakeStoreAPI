@@ -31,13 +31,14 @@ const [showNoAccountAlert,setShowNoAccountAlert]=useState(false)
   const googleSignOut=async()=>{
     if(user){
       //When this function it's called, it signOut the user (only if its registered) directly. 
+      await signOut(auth)
       setUser(null)
       setSignOutAlert(true)
       setTimeout(() => {
         setSignOutAlert(false)
       }, 5000);
-    await signOut(auth)
     //We update the user state to be null to avoid possible errors.
+    
     window.location.assign("/")
     }else{
       setShowNoAccountAlert(true)
