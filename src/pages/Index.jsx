@@ -49,7 +49,6 @@ export function Index() {
     input.click();
   };
 
-  const [user, signin, signOut] = useContext(googleAuthContext);
   
 
   return (

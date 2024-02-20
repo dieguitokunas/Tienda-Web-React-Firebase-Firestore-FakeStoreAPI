@@ -8,18 +8,22 @@ import {
   ShoppingBag,
   ExpandCircleDown,
   ExpandMore,
+  Logout,
+  Login,
 } from "@mui/icons-material";
-import { Accordion, AccordionSummary, SwipeableDrawer } from "@mui/material";
-import { useEffect, useState } from "react";
+import { SwipeableDrawer } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./Header.css";
+import { googleAuthContext } from "../contexts/GoogleAuth";
+import { signOut } from "firebase/auth";
 export function Header() {
   const nav = useNavigate();
+  const [user,signIn,signOut]=useContext(googleAuthContext)
   const [drawerOpen, setDrawerOpen] = useState();
   const [darkTheme, setDarkTheme] = useState();
   const [initialScroll, setinitialScroll] = useState(pageYOffset);
   const [showMobileBar, setShowMobileBar] = useState();
-  const [accordion,setAccordion]=useState()
   useEffect(() => {
     const handleScroll = () => {
       const actualScroll = window.pageYOffset;
@@ -60,7 +64,10 @@ export function Header() {
     {
       title: "Mode",
       icon: darkTheme ? <ModeNight /> : <LightMode />,
-    },
+    },{
+      title:`${user?'Logout':'Login'}`,
+      icon:`${user?<Logout/>:<Login/>}`
+    }
   ];
 
 
@@ -75,7 +82,11 @@ export function Header() {
                 <li
                   className="hover:text-[--pinky-gray]"
                   key={index}
-                  onClick={() => nav(item.nav)}
+                  onClick={() => {
+                    if(index===4){
+                      user?signOut():signIn()
+                    }
+                    nav(item.nav)}}
                 >
                   {index!==3?item.title:item.icon}
                 </li>

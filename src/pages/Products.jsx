@@ -1,36 +1,66 @@
-import { useContext,useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { APIContext } from "../contexts/APICall";
+import { googleAuthContext } from "../contexts/GoogleAuth";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Favorite } from "@mui/icons-material";
-import { Fade,Skeleton,Accordion,AccordionSummary,AccordionDetails } from "@mui/material";
+import {
+  Fade,
+  Skeleton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
+import { UserCartProductsContext } from "../contexts/UserCartProducts";
+export function Products() {
+  //Here we call the response.json that has been saved in the APICall component, and exported within the APIContext Provider. 
+  const data = useContext(APIContext);
+  //We call 3 parameter's here: 1- The user data (The one provided by the Google authentication in the GoogleAuth component), 2- The GoogleSignIn function (called as signin ), wich let's the user signin just with one click whenever the function its called, and 3- The GoogleSignOut function, the same than the previous one, with the difference it is used to signout of your account.  
+  const [user, signin, signOut] = useContext(googleAuthContext);
+  //Here we call two parameters, the firts its 'called' but never asigned to an alias, it's for acceding to the value with index 1 [the second parameter given in the UserCartProductsContext in the UserCartProducts component]. If we needed, i.e, call only the GoogleSignOut functions above, we need to do it like this [,,signOut]. The 'addTocart' alias call the addProductsToCart function of the UserCartProducts Component.  
+  const [,addToCart]=useContext(UserCartProductsContext)
+  //This is just to control if the articles are renderized as the real 'data' or as a skeleton to represent a charge.
+  const [loaded, setLoaded] = useState(false);
+  const [buttonClicked,setButtonClicked]=useState([])
+  const categories = [
+    {
+      category: "Men's Clothing",
+      value: "Men's Clothing",
+      text: "Clothing for men",
+    },
+    {
+      category: "Women's Clothing",
+      value: "Women's Clothing",
+      text: "Clothing for women",
+    },
+    {
+      category: "Jewelry",
+      value: "Jewelry",
+      text: "Jewelry accesories",
+    },
+    {
+      category: "Electronics",
+      value: "Electronics",
+    },
+  ];
 
-export function Products(){
-    const data = useContext(APIContext);
-    const [loaded, setLoaded] = useState(false);
-    const categories = [
-        {
-          category: "Men's Clothing",
-          value: "Men's Clothing",
-          text: "Clothing for men",
-        },
-        {
-          category: "Women's Clothing",
-          value: "Women's Clothing",
-          text: "Clothing for women",
-        },
-        {
-          category: "Jewelry",
-          value: "Jewelry",
-          text: "Jewelry accesories",
-        },
-        {
-          category: "Electronics",
-          value: "Electronics",
-        },
-      ];
 
-    const sectionProducts =
+const handleButtonClicked=async(productId,index)=>{
+  try {
+    setButtonClicked(!buttonClicked[index])
+    await addToCart(productId)
+  } catch (error) {
+      console.error(error)
+  }finally{
+    setButtonClicked(!buttonClicked[index])
+  }
+}
+  
+
+  const sectionProducts =
     loaded && data.length > 0
       ? data.map((product, index) => (
           <Fade in={true} enter={true} key={index}>
@@ -58,9 +88,9 @@ export function Products(){
                 <div className="article-buttons flex items-center justify-center gap-5">
                   <button
                     className="w-[8rem] h-8 bg-[--dark-gray]  text-[--white-bone] rounded-sm"
-                    onClick={() => signOut()}
+                    onClick={() =>{!user&&signin(), user&&handleButtonClicked(product.id,index)}}
                   >
-                    Add to cart
+                    {buttonClicked[index]?<CircularProgress/>:'Add to cart'}
                   </button>
                   <button
                     className="w-[8rem] h-8 bg-[--golden-yellow] rounded-sm"
@@ -91,48 +121,54 @@ export function Products(){
     }
   }, []);
 
-  return(
+  return (
     <>
-    <main className="bg-[--pinky-rose] flex flex-col">
-    <Header/>
-    <section className="min-h-screen w-full flex max-sm:flex-col max-sm:items-center justify-center gap-5 bg-[--pinky-gray] pt-10">
-    <div className="filtros md:w-1/4 max-sm:w-3/4 bg-[--white-bone] flex flex-col gap-6 items-center">
-      <div className="options w-full">
-        <Accordion expanded={undefined}>
-          <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
-            Categories
-          </AccordionSummary>
-          <AccordionDetails>
-            <ul className="*:border-b-2 border-[--dark-gray] flex flex-col gap-4 *:cursor-pointer">
-              {categories.map((category, index) => (
-                <li
-                  key={index}
-                  className="w-full flex justify-between items-center"
-                  onClick={() => handleCategoriesClick(category.value)}
-                  >
-                  {category.category}
-                  <input
-                    type="radio"
-                    name="category"
-                    id={category.value}
-                    className=" appearance-none w-4 h-4 rounded-[50%] bg-[--dark-gray] checked:bg-[--golden-yellow] border-[--pinky-gray] checked:border-[--dark-gray] border-2"
-                    />
-                </li>
-              ))}
-            </ul>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <button className="max-sm:w-full sm:w-[10rem] h-10 bg-[--golden-yellow]">
-        {" "}
-        Filter
-      </button>
-    </div>
-    <div className="pb-10 max-md:w-full md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pr-2 pl-2 place-items-center ">
-      {sectionProducts}
-    </div>
-  </section>
-  </main>
-              </>
-  )
+      <main className="bg-[--pinky-rose] flex flex-col">
+        <Header />
+        <section className="min-h-screen w-full flex max-sm:flex-col max-sm:items-center justify-center gap-5 bg-[--pinky-gray] pt-10">
+          <div className="filtros md:w-1/4 max-sm:w-3/4 bg-[--white-bone] flex flex-col gap-6 items-center">
+            <div className="options w-full">
+              <TextField
+                variant="filled"
+                color="inherit"
+                className="w-full border-[--dark-gray!important]"
+                placeholder="Type here..."
+              />
+              <Accordion expanded={undefined}>
+                <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+                  Categories
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul className="*:border-b-2 border-[--dark-gray] flex flex-col gap-4 *:cursor-pointer">
+                    {categories.map((category, index) => (
+                      <li
+                        key={index}
+                        className="w-full flex justify-between items-center"
+                        onClick={() => handleCategoriesClick(category.value)}
+                      >
+                        {category.category}
+                        <input
+                          type="radio"
+                          name="category"
+                          id={category.value}
+                          className=" appearance-none w-4 h-4 rounded-[50%] bg-[--dark-gray] checked:bg-[--golden-yellow] border-[--pinky-gray] checked:border-[--dark-gray] border-2"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+            <button className="max-sm:w-full sm:w-[10rem] h-10 bg-[--golden-yellow]">
+              Search
+            </button>
+          </div>
+          <div className="pb-10 max-md:w-full md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pr-2 pl-2 place-items-center ">
+            {sectionProducts}
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
 }
