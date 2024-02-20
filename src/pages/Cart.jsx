@@ -7,11 +7,13 @@ import { Add, Remove, Clear } from "@mui/icons-material";
 import "./Cart.css";
 import Fade from "@mui/material/Fade";
 import { Skeleton } from "@mui/material";
+import { googleAuthContext } from "../contexts/GoogleAuth";
 export function Cart() {
   //Call the 'userProducts' state of the UserCartProducts Component
   const [getUserProducts, addTocart, removeFromCart] = useContext(
     UserCartProductsContext
   );
+  const [user]=useContext(googleAuthContext)
   //Asign the values to a variable so it can be maped or iterated
   const userProducts = getUserProducts;
   //Call the products data of the API
@@ -34,16 +36,18 @@ export function Cart() {
     };
 
     mixProducts();
-  }, [getUserProducts]);
+  }, [getUserProducts,APIProducts]);
 
   const handleRemoveFromCart = async (productID, index) => {
+    const cartProduct = document.getElementById(`cartProductN${index}`);
     try {
-      const cartProduct = document.getElementById(`cartProductN${index}`);
-      cartProduct.innerHTML =cartProduct.innerHTML+'<div class="absolute w-full h-full bg-[--darker-dark-gray] opacity-10"></div>' 
-      await removeFromCart(productID);
+      const htmlOriginal=cartProduct.innerHTML
+      cartProduct.innerHTML =htmlOriginal+'<div class="absolute w-full h-full bg-[--darker-dark-gray] opacity-10"></div>' 
+      await removeFromCart(productID)
       cartProduct.remove()
     } catch (error) {
       console.error(error);
+      cartProduct.innerHTML=htmlOriginal
     }
   };
 
@@ -112,7 +116,7 @@ export function Cart() {
             </article>
           </Fade>
         ))
-      : Array(10)
+      : user!==null?Array(10)
           .fill()
           .map((p,index) => (
             <Skeleton
@@ -122,7 +126,9 @@ export function Cart() {
               height={"10rem"}
               animation="wave"
             ></Skeleton>
-          ));
+          )):(
+            <p className="text-xl text-center border-[--dark-gray] border-b-2">No te encuentras registrado</p>
+          )
 
   return (
     <>
