@@ -20,7 +20,7 @@ export function UserCartProducts({ children }) {
   const [user] = useContext(googleAuthContext);
   //This state save's the user Document UID so it can be refered later.
   const [userUID, setUserUID] = useState(false);
-  const getProducts = async (updateCart=false) => {
+  const getProducts = async (updateCart=true) => {
     if (user) {
       try {
         //Gets a Snapshot of the 'users' collection of the Firestore DB where the email field be equal to the user email.
@@ -46,9 +46,9 @@ export function UserCartProducts({ children }) {
               productsArray.push(doc.data());
             });
             setUserPoducts(productsArray);
-            if(updateCart){
-              setUserPoducts(productsArray)
-            }
+             if(updateCart){
+               setUserPoducts(productsArray)
+             }
           }
         } else {
           const userData = {
@@ -82,13 +82,10 @@ export function UserCartProducts({ children }) {
       } catch (error) {
         console.error("Error adding product to cart:", error);
       }
-       finally{
-         getProducts()
-       }
     }
   };
 
-  const deleteProductsFromCart = async (productId) => {
+  const deleteProductsFromCart = async (productId,updateCart=false) => {
     if (user && userUID) {
       try {
         const carritoCollection = collection(db, `users/${userUID}/carrito`);
@@ -97,7 +94,18 @@ export function UserCartProducts({ children }) {
         );
         if (!getProductSnapshot.empty) {
           const docRef = getProductSnapshot.docs[0].ref;
+         if(updateCart){
+          const quantity=getProductSnapshot.docs[0].data().quantity-1
+          const productId=getProductSnapshot.docs[0].data().id
+          if(quantity===0){
+            await deleteDoc(docRef)
+          }else{
+            await setDoc(docRef,{id:productId,quantity:quantity})
+          }
+        }else{
           await deleteDoc(docRef);
+        }
+        await getProducts(true)
         }
       } catch (error) {
         console.log(error);
