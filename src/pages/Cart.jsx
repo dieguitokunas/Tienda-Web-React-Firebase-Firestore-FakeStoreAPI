@@ -113,7 +113,6 @@ export function Cart() {
       productToRemove.style.opacity = 0.7;
       productToRemove.style.background = "var(--pinky-gray)";
       await removeFromCart(productId, true);
-      await getProducts(true);
       productToRemove.style.opacity = 1;
       productToRemove.style.background = "var(--white-bone)";
     } catch {}
