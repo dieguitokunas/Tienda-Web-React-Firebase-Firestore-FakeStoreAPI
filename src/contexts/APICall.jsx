@@ -1,7 +1,7 @@
 import React, { createContext, useLayoutEffect, useState } from "react";
 export const APIContext = createContext();
 export function APICall({ children }) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(false);
   
   const fetchData = async () => {
     //Calls the API and await for the response.json to save it in 'data'

@@ -12,7 +12,6 @@ export function App() {
         <GoogleAuth>
           <UserCartProducts>
             <Browser>
-              <Index />
             </Browser>
           </UserCartProducts>
         </GoogleAuth>
