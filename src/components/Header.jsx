@@ -1,7 +1,5 @@
 import {
   Home,
-  LightMode,
-  ModeNight,
   Menu,
   ShoppingCart,
   ShoppingBag,
@@ -18,10 +16,12 @@ export function Header() {
   const nav = useNavigate();
   const location = useLocation();
   const [user, signIn, signOut] = useContext(googleAuthContext);
-  const [darkTheme, setDarkTheme] = useState();
   const [initialScroll, setinitialScroll] = useState(pageYOffset);
-  const [showMobileBar, setShowMobileBar] = useState();
+  const [showMobileBar, setShowMobileBar] = useState(true);
   const [menuClicked, setMenuClicked] = useState(false);
+
+  
+
   useEffect(() => {
     const handleScroll = () => {
       const actualScroll = window.pageYOffset;
@@ -33,10 +33,6 @@ export function Header() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [initialScroll]);
-
-  const changeTheme = () => {
-    setDarkTheme(!darkTheme);
-  };
 
   const navItems = [
     {
@@ -65,10 +61,6 @@ export function Header() {
         <Login sx={{ color: "#E3B23C" }} />
       ),
       active: false,
-    },
-    {
-      title: "Mode",
-      icon: darkTheme ? <ModeNight /> : <LightMode />,
     },
   ];
 
@@ -169,10 +161,8 @@ export function Header() {
                 return (
                   <li
                     key={index}
-                    onClick={() =>
-                      index === 3
-                        ? (user ? signOut() : signIn(), nav(item.nav))
-                        : (changeTheme(), nav(item.nav))
+                    onClick={
+                      (() => (user ? signOut() : (signIn()), nav(item.nav)))
                     }
                     className="hover:text-[var(--white-bone)] flex items-center gap-2"
                   >
@@ -196,29 +186,41 @@ export function Header() {
           showMobileBar ? "bottom-0" : "bottom-[-10rem]"
         } bg-[--dark-gray] transition-all w-full h-12 flex items-center md:hidden max-md:fixed z-[1000] max-md:justify-center *:border-t-4 *:border-[--golden-yellow]`}
       >
-        <div className="flex items-center text-[var(--pinky-gray)] justify-between w-full h-14 px-5">
-          <div className="flex items-center">
-            {navItems.map((item, index) => {
-              if (index === 4) {
-                return <p onClick={()=>changeTheme()} className="cursor-pointer hover:text-[--white-bone]">{item.icon}</p>;
-              }
-            })}
-          </div>
-
+        <div className="flex items-center text-[var(--pinky-gray)] justify-between w-full h-14 px-10">
           <ul className="w-full h-full flex bg-[--dark-gray] gap-10 justify-center items-center">
             {navItems.map((item, index) => {
               if (index < 3) {
-                return <li key={index} className={`${item.active?'text-[var(--golden-yellow)]':'text-[var(--pinky-gray)]'} cursor-pointer hover:text-[--white-bone]`} onClick={()=>nav(item.nav)}>{item.icon}</li>;
+                return (
+                  <li
+                    key={index}
+                    className={`${
+                      item.active
+                        ? "text-[var(--golden-yellow)]"
+                        : "text-[var(--pinky-gray)]"
+                    } cursor-pointer hover:text-[--white-bone]`}
+                    onClick={() => nav(item.nav)}
+                  >
+                    {item.icon}
+                  </li>
+                );
               }
             })}
           </ul>
           <div className="flex items-center gap-2">
-            {user?(
-              <img className="size-8 rounded-full" src={user.photoURL}/>
-            ):(<Person sx={{background:"var(--white-bone)",borderRadius:"50%"}}/>)}
+            {user ? (
+              <img className="size-8 rounded-full" src={user.photoURL} />
+            ) : (
+              <Person
+                sx={{ background: "var(--white-bone)", borderRadius: "50%" }}
+              />
+            )}
             {navItems.map((item, index) => {
               if (index === 3) {
-                return <p onClick={()=>user?signOut():signIn()}>{item.icon}</p>;
+                return (
+                  <p className="cursor-pointer" onClick={() => (user ? signOut() : signIn())}>
+                    {item.icon}
+                  </p>
+                );
               }
             })}
           </div>

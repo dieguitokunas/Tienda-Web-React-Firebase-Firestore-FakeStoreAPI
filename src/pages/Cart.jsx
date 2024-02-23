@@ -19,6 +19,7 @@ export function Cart() {
   const [loadPage, setLoadPage] = useState(true);
   const [cartProducts, setCartProducts] = useState(false);
   const nav = useNavigate();
+  const [clickedTerms,setClickedTerms]=useState(false)
   const checkProducts = async () => {
     try {
       await getProducts();
@@ -360,14 +361,15 @@ export function Cart() {
                         className=" accent-[var(--golden-yellow)]"
                         name=""
                         id=""
+                        onChange={()=>setClickedTerms(!clickedTerms)}
                       />
                       <p>I've readed the terms and conditions.</p>
                     </label>
                     <button
                       className={`bg-[var(--golden-yellow)] rounded-sm p-2 w-1/2 text-[var(--darker-dark-gray)!important] ${
-                        cartProducts ? "opacity-100" : "opacity-50"
+                        cartProducts&&clickedTerms ? "opacity-100" : "opacity-50"
                       }`}
-                      disabled={cartProducts ? false : true}
+                      disabled={cartProducts&&clickedTerms ? false : true}
                     >
                       Buy
                     </button>

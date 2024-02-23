@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react"
 import { APIContext } from "../contexts/APICall"
 import { googleAuthContext } from "../contexts/GoogleAuth"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
-import { Favorite } from "@mui/icons-material"
 import {
   Fade,
   Skeleton,
@@ -78,13 +77,12 @@ export function Products() {
         })}).map((product,index) => (
           <Fade in={true} enter={true} key={index}>
             <article className="flex-col justify-center flex  max-sm:w-4/5 sm:w-full h-fit bg-[--white-bone] border border-[--dark-gray] rounded-sm cursor-pointer">
-              <div className="image-container relative w-full h-28 rounded-[inherit]">
+              <div className="image-container w-full h-28 rounded-[inherit]">
                 <img
                   src={product.image}
                   alt={product.description}
                   className="object-contain border-none w-full h-full bg-white object-center  rounded-[inherit]"
                 />
-                <Favorite className="absolute top-0 right-0 text-[--dark-gray] " />
               </div>
               <div className="article-content bg-[--white-bone] h-28 justify-center gap-4 p-4 border-[--dark-gray] border-t-2 flex flex-col">
                 <div className="article-header flex justify-between items-center ">
