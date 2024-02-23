@@ -69,7 +69,13 @@ export function Products() {
   const sectionProducts =
     loaded && data.length > 0
       ? data.filter(productsFilter(categoryData,optionData)
-      ).filter(product=>product.title.toLowerCase().includes(inputData.toLowerCase())).map((product,index) => (
+      ).filter(product=> {
+        return Object.values(product).some(value => {
+            if (typeof value === 'string') {
+                return value.toLowerCase().includes((inputData.toLowerCase()));
+            }
+            return false;
+        })}).map((product,index) => (
           <Fade in={true} enter={true} key={index}>
             <article className="flex-col justify-center flex  max-sm:w-4/5 sm:w-full h-fit bg-[--white-bone] border border-[--dark-gray] rounded-sm cursor-pointer">
               <div className="image-container relative w-full h-28 rounded-[inherit]">
@@ -208,7 +214,7 @@ export function Products() {
               Search
             </button>
           </div>
-          <div className="max-md:w-full h-fit md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+          <div className="max-md:w-full h-fit md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-sm:place-items-center ">
             {sectionProducts}
           </div>
         </section>
