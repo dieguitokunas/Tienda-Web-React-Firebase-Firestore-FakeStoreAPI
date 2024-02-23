@@ -250,7 +250,9 @@ export function Cart() {
   return (
     <>
       <Header />
-      <main className="min-h-screen w-full bg-[--pinky-gray] flex max-md:flex-col gap-2 pt-5">
+      <Fade in={true}>
+
+      <main className="min-h-screen w-full bg-[--pinky-gray] flex max-md:flex-col gap-2 pt-5 sm:pr-12">
         <section className="max-md:w-full md:w-3/4 bg-[--dark-gray] min-h-screen h-fit overflow-auto cart flex flex-col">
           <div className="headers bg-[var(--white-bone)] text-[var(--darker-dark-gray)] font-bold text-center w-full h-full max-sm:hidden sm:flex items-center">
             <p className="w-2/4 ">Products</p>
@@ -376,6 +378,7 @@ export function Cart() {
           )}
         </section>
       </main>
+      </Fade>
       <Footer />
     </>
   );

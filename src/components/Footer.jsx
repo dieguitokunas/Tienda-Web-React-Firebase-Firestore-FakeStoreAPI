@@ -7,7 +7,7 @@ import {
 import "./Footer.css";
 export function Footer() {
   return (
-    <footer className="footer w-full min-h-96 grid max-sm:grid-cols-1 max-md:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 max-md:gap-20 md:gap-10 p-4 place-items-center pt-20">
+    <footer className="footer w-full min-h-96 grid max-sm:grid-cols-1 max-md:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 max-md:gap-20 md:gap-10 p-4 place-items-center pt-20 sm:pr-12">
       <span className="border-[--golden-yellow] w-full h-48 border-r-2 border-b-2 p-2">
         <div className="text-[--white-bone]">
           <p className="font-black text-xl border-b-2">About me</p>

@@ -70,7 +70,7 @@ export function Products() {
                   alt={product.description}
                   className="object-contain border-none w-full h-full bg-white object-center  rounded-[inherit]"
                 />
-                <Favorite className="absolute top-0 right-0 text-[--dark-gray]" />
+                <Favorite className="absolute top-0 right-0 text-[--dark-gray] " />
               </div>
               <div className="article-content bg-[--white-bone] h-28 justify-center gap-4 p-4 border-[--dark-gray] border-t-2 flex flex-col">
                 <div className="article-header flex justify-between items-center ">
@@ -124,9 +124,15 @@ export function Products() {
     }
   }, [data])
 
+  const handleCategoriesClick=(value)=>{
+    const input=document.getElementById(value)
+    input.click()
+  }
+
+
   return (
     <>
-      <main className="bg-[--pinky-gray] flex flex-col">
+      <main className="bg-[--pinky-gray] flex flex-col sm:*:pr-12">
         <Header />
         <section className="min-h-screen w-full flex max-sm:flex-col max-sm:items-center justify-center gap-5 bg-[--pinky-gray] pt-10">
           <div className="filtros md:w-1/4 max-sm:w-3/4 bg-[--white-bone] flex flex-col gap-6 items-center">
@@ -170,8 +176,8 @@ export function Products() {
             {sectionProducts}
           </div>
         </section>
-      </main>
       <Footer />
+      </main>
     </>
   )
 }

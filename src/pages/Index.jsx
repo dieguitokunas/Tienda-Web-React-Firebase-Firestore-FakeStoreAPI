@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { googleAuthContext } from "../contexts/GoogleAuth";
+import React from "react";
 import {  FlightTakeoff, Hearing } from "@mui/icons-material";
 import "../index.css";
 import { Header } from "../components/Header";
 import PaymentIcon from 'react-payment-icons'
 import { Footer } from "../components/Footer";
+import Fade from "@mui/material/Fade";
 export function Index() {
 
   const categories = [
@@ -44,23 +44,21 @@ export function Index() {
     email:"diegoborras82@gmail.com",
     icon:<Hearing/>
   }]
-  const handleCategoriesClick = (value) => {
-    const input = document.getElementById(value);
-    input.click();
-  };
 
   
 
   return (
     <>
+      
       <Header />
-      <main className="h-fit flex flex-col items-center category-section ">
+      <main className="h-fit flex flex-col items-center category-section sm:*:pr-12 ">
         <p className="text-6xl font-black font-serif text-[--white-bone]">
           We sell
         </p>
         <span className="*:font-serif font-bold text-5xl text-[--golden-yellow]">
                   <p>The best</p>
                 </span>
+    <Fade in={true}>
         <section className=" w-full min-w-fit h-[96] max-h-fit grid grid-cols-3 max-md:grid-cols-1 gap-5 place-items-center p-10 *:rounded-md rounded-md text-[--dark-gray]">
           {categories.map((category, index) => {
             if (index !== 3){
@@ -100,8 +98,10 @@ export function Index() {
            </div>
           ))}
         </section>
-      </main>
+    </Fade>
     <Footer/>
+      </main>
+
     </>
   );
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Index } from "./pages/Index";
 import { Browser } from "./router/Browser";
 import { APICall } from "./contexts/APICall";
 import { FirebaseConfig } from "./contexts/FireBaseConfig";
@@ -11,6 +10,7 @@ export function App() {
       <FirebaseConfig>
         <GoogleAuth>
           <UserCartProducts>
+          
             <Browser>
             </Browser>
           </UserCartProducts>
