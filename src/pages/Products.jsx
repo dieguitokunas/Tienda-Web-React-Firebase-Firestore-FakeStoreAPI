@@ -10,7 +10,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   TextField,
-  CircularProgress,
 } from "@mui/material"
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
@@ -24,26 +23,32 @@ export function Products() {
   const [, addToCart] = useContext(UserCartProductsContext)
   //This is just to control if the articles are renderized as the real 'data' or as a skeleton to represent a charge.
   const [loaded, setLoaded] = useState(false)
+  const [inputData,setInputData]=useState('')
+  const [optionData,setOptionData]=useState(undefined)
+  const [categoryData,setCategoryData]=useState(undefined)
   const categories = [
     {
       category: "Men's Clothing",
-      value: "Men's Clothing",
+      value: "men's clothing",
       text: "Clothing for men",
     },
     {
       category: "Women's Clothing",
-      value: "Women's Clothing",
+      value: "women's clothing",
       text: "Clothing for women",
     },
     {
       category: "Jewelry",
-      value: "Jewelry",
+      value: "jewelery",
       text: "Jewelry accesories",
     },
     {
       category: "Electronics",
-      value: "Electronics",
-    },
+      value: "electronics",
+    },{
+      category: "Clear Filters",
+      value: "clear"
+    }
   ]
   const handleButtonClicked = async (productId, index) => {
     try {
@@ -58,12 +63,15 @@ export function Products() {
       btn.disabled = false 
     }
   }
-
+  const productsFilter=(filter,condition)=>{
+    return (product=>product[filter]===condition)
+  }
   const sectionProducts =
     loaded && data.length > 0
-      ? data.map((product, index) => (
+      ? data.filter(productsFilter(categoryData,optionData)
+      ).filter(product=>product.title.toLowerCase().includes(inputData.toLowerCase())).map((product,index) => (
           <Fade in={true} enter={true} key={index}>
-            <article className="flex-col justify-center flex  max-sm:w-4/5 sm:w-full h-full bg-[--white-bone] border border-[--dark-gray] rounded-sm cursor-pointer">
+            <article className="flex-col justify-center flex  max-sm:w-4/5 sm:w-full h-fit bg-[--white-bone] border border-[--dark-gray] rounded-sm cursor-pointer">
               <div className="image-container relative w-full h-28 rounded-[inherit]">
                 <img
                   src={product.image}
@@ -105,7 +113,7 @@ export function Products() {
               </div>
             </article>
           </Fade>
-        ))
+      ))
       : Array(10)
           .fill()
           .map((_, index) => (
@@ -128,7 +136,32 @@ export function Products() {
     const input=document.getElementById(value)
     input.click()
   }
+  const clearFilters = () => {
+    setInputData('');
+    setOptionData(undefined);
+    setCategoryData(undefined);
+     const inputs = document.querySelectorAll("input[name='category']");
+     inputs.forEach(input => {
+       input.checked = false;
+     });
+  };
 
+
+  const handleFilters=()=>{
+    const option = document.querySelector("input[name='category']:checked");
+    const selectedCategory = option ? option.value : "";
+
+    const input = document.getElementById("inputData");
+    const inputVal = input ? input.value : "";
+    setInputData(inputVal);
+
+    if (selectedCategory === "clear") {
+      clearFilters()
+    } else if (selectedCategory) {
+      setOptionData(selectedCategory);
+      setCategoryData('category');
+    }
+  }
 
   return (
     <>
@@ -142,6 +175,8 @@ export function Products() {
                 color="inherit"
                 className="w-full border-[--dark-gray!important]"
                 placeholder="Type here..."
+                id="inputData"
+                onKeyDown={(event)=>{if(event.keyCode===13){handleFilters()}}}
               />
               <Accordion expanded={undefined}>
                 <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
@@ -160,6 +195,7 @@ export function Products() {
                           type="radio"
                           name="category"
                           id={category.value}
+                          value={category.value}
                           className=" appearance-none w-4 h-4 rounded-[50%] bg-[--dark-gray] checked:bg-[--golden-yellow] border-[--pinky-gray] checked:border-[--dark-gray] border-2"
                         />
                       </li>
@@ -168,11 +204,11 @@ export function Products() {
                 </AccordionDetails>
               </Accordion>
             </div>
-            <button className="max-sm:w-full sm:w-[10rem] h-10 bg-[--golden-yellow]">
+            <button className="max-sm:w-full sm:w-[10rem] h-10 bg-[--golden-yellow]" onClick={()=>handleFilters()}>
               Search
             </button>
           </div>
-          <div className="max-md:w-full md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 place-items-center ">
+          <div className="max-md:w-full h-fit md:w-3/4 bg-[--pinky-gray] grid  sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
             {sectionProducts}
           </div>
         </section>
